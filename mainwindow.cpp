@@ -60,9 +60,6 @@ void MainWindow::startButtonClicked()
     scene->clear();
     scene->addPixmap(fieldPixmap);
 
-    //Depricated random
-    srand(static_cast<unsigned int>(time(0)));
-
     //Create player1
     if(ui->p1HumanRB->isChecked())
         p1 = new Human(scene);

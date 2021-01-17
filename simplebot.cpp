@@ -27,6 +27,7 @@ void SimpleBot::turnStart(Match input)
                     best.push_back(p);
             }
         }
-    QTimer::singleShot(300, [this, best]() { emit turnFinished(this, best[rand()%best.size()]); } );
+    Position result = best[QRandomGenerator::global()->bounded(best.size())];
+    QTimer::singleShot(300, [this, result]() { emit turnFinished(this, result); } );
 }
 void SimpleBot::processClick(Position) {}

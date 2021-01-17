@@ -1,9 +1,9 @@
 #ifndef ADVANCEDBOT_H
 #define ADVANCEDBOT_H
 
-#include <random>
 #include <QTimer>
 #include <QVector>
+#include <QRandomGenerator>
 
 #include "player.h"
 #include "match.h"

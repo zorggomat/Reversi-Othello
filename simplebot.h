@@ -1,7 +1,7 @@
 #ifndef SIMPLEBOT_H
 #define SIMPLEBOT_H
 
-#include <random>
+#include <QRandomGenerator>
 #include <QVector>
 #include <QTimer>
 
