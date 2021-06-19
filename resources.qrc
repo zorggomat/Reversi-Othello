@@ -3,5 +3,6 @@
         <file>black.png</file>
         <file>field.png</file>
         <file>white.png</file>
+        <file>icon.png</file>
     </qresource>
 </RCC>
