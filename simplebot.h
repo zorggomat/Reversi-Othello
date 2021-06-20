@@ -13,9 +13,11 @@ using namespace std;
 class SimpleBot : public Player
 {
     CellState color;
+    int turnTime = 0;
 public:
     SimpleBot();
 
+    void setTurnTime(int miliseconds);
     void setColor(CellState);
     CellState getColor();
     QString name();

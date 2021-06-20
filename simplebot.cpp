@@ -1,9 +1,27 @@
 #include "simplebot.h"
 
 SimpleBot::SimpleBot() { }
-void SimpleBot::setColor(CellState c) { color = c; }
-CellState SimpleBot::getColor() { return color; }
-QString SimpleBot::name() { return "Simple Bot"; }
+
+void SimpleBot::setTurnTime(int miliseconds)
+{
+    turnTime = miliseconds;
+}
+
+void SimpleBot::setColor(CellState c)
+{
+    color = c;
+}
+
+CellState SimpleBot::getColor()
+{
+    return color;
+}
+
+QString SimpleBot::name()
+{
+    return "Simple Bot";
+}
+
 void SimpleBot::turnStart(Match input)
 {
     QVector<Position> best;
@@ -28,6 +46,6 @@ void SimpleBot::turnStart(Match input)
             }
         }
     Position result = best[QRandomGenerator::global()->bounded(best.size())];
-    QTimer::singleShot(300, [this, result]() { emit turnFinished(this, result); } );
+    QTimer::singleShot(turnTime, [this, result]() { emit turnFinished(this, result); } );
 }
 void SimpleBot::processClick(Position) {}

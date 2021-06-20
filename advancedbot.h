@@ -13,11 +13,13 @@ using namespace std;
 class AdvancedBot : public Player
 {
     CellState color;
-    int turnNumber=0;
+    int turnTime = 0;
+    int turnNumber = 0;
     const int midGameTurn = 45;
 public:
     AdvancedBot();
 
+    void setTurnTime(int miliseconds);
     void setColor(CellState c);
     CellState getColor();
     QString name();

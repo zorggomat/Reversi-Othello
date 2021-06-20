@@ -5,4 +5,7 @@
         <file>white.png</file>
         <file>icon.png</file>
     </qresource>
+    <qresource prefix="/sound">
+        <file>sound.wav</file>
+    </qresource>
 </RCC>

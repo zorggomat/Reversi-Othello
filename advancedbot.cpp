@@ -1,10 +1,32 @@
 #include "advancedbot.h"
 
 AdvancedBot::AdvancedBot() { }
-QString AdvancedBot::name() { return "AdvancedBot"; }
-void AdvancedBot::setColor(CellState c) { color = c; }
-CellState AdvancedBot::getColor() { return color; }
-void AdvancedBot::processClick(Position) {} //for Human
+
+QString AdvancedBot::name()
+{
+    return "AdvancedBot";
+}
+
+void AdvancedBot::setTurnTime(int miliseconds)
+{
+    turnTime = miliseconds;
+}
+
+void AdvancedBot::setColor(CellState c)
+{
+    color = c;
+}
+
+CellState AdvancedBot::getColor()
+{
+    return color;
+}
+
+void AdvancedBot::processClick(Position)
+{
+
+}
+
 void AdvancedBot::turnStart(Match input)
 {
     turnNumber++;
@@ -49,5 +71,5 @@ void AdvancedBot::turnStart(Match input)
         }
 
     Position result = best[QRandomGenerator::global()->bounded(best.size())];
-    QTimer::singleShot(300, [this, result]() { emit turnFinished(this, result); } );
+    QTimer::singleShot(turnTime, [this, result]() { emit turnFinished(this, result); } );
 }

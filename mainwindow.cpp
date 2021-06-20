@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMediaPlayer>
+#include <QBuffer>
+#include <QFile>
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -10,8 +14,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     //Connect buttons to click handlers
     connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::startButtonClicked);
+    connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::settingsButtonClicked);
     connect(ui->restartButton, &QPushButton::clicked, this, &MainWindow::startButtonClicked);
-    connect(ui->backButton, &QPushButton::clicked, this, &MainWindow::backButtonClicked);
+    connect(ui->gameTabBackButton, &QPushButton::clicked, this, &MainWindow::gameTabBackButtonClicked);
+    connect(ui->settingsTabBackButton, &QPushButton::clicked, this, &MainWindow::settingsTabBackButtonClicked);
+
+    //Connect sliders to move handlers
+    connect(ui->turnTimeSlider, &QSlider::sliderMoved, this, &MainWindow::botTurnSliderMoved);
+    connect(ui->volumeSlider, &QSlider::sliderMoved, this, &MainWindow::volumeSliderMoved);
 
     //Load images from resources
     fieldPixmap.load(":/img/field.png");
@@ -21,11 +31,29 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     //Init graphicsView
     scene = new GraphicsScene();
     ui->graphicsView->setScene(scene);
+
+    //Init audio player
+    QFile file(":/sound/sound.wav");
+    file.open(QIODevice::ReadOnly);
+    QByteArray arr = file.readAll();
+    file.close();
+
+    player = new QMediaPlayer;
+    player->setVolume(ui->volumeSlider->value());
+    soundBuffer = new QBuffer(player);
+    soundBuffer->setData(arr);
+    soundBuffer->open(QIODevice::ReadOnly);
+    player->setMedia(QMediaContent(), soundBuffer);
+
+    //Init bot turn time
+    botTurnTime = ui->turnTimeSlider->value();
 }
 
 MainWindow::~MainWindow()
 {
     delete scene;
+    delete player;
+    delete soundBuffer;
     delete ui;
 }
 
@@ -41,12 +69,34 @@ void MainWindow::Draw(const Match &f)
         }
 }
 
-void MainWindow::backButtonClicked()
+void MainWindow::settingsButtonClicked()
+{
+    ui->tabWidget->setCurrentIndex( (int)TabIndex::settingsTab );
+}
+
+void MainWindow::gameTabBackButtonClicked()
 {
     //stop game
     disconnect(p1, SIGNAL(turnFinished(Player*, Position)), this, SLOT(processTurn(Player*, Position)));
     disconnect(p2, SIGNAL(turnFinished(Player*, Position)), this, SLOT(processTurn(Player*, Position)));
-    ui->tabWidget->setCurrentIndex(0); //switch to menu tab
+    ui->tabWidget->setCurrentIndex( (int)TabIndex::menuTab );
+}
+
+void MainWindow::settingsTabBackButtonClicked()
+{
+    ui->tabWidget->setCurrentIndex( (int)TabIndex::menuTab );
+}
+
+void MainWindow::botTurnSliderMoved(int value)
+{
+    botTurnTime = value;
+    ui->turnTimeMilisecondsLabel->setText(QString::number(value) + " ms");
+}
+
+void MainWindow::volumeSliderMoved(int value)
+{
+    player->setVolume(value);
+    ui->volumePercentLabel->setText(QString::number(value) + "%");
 }
 
 void MainWindow::startButtonClicked()
@@ -74,6 +124,10 @@ void MainWindow::startButtonClicked()
         p2 = new SimpleBot();
     else p2 = new AdvancedBot();
 
+    //Set turn time
+    p1->setTurnTime(botTurnTime);
+    p2->setTurnTime(botTurnTime);
+
     //Changeto: setcolor
     p1->setColor(black);
     p2->setColor(white);
@@ -87,7 +141,7 @@ void MainWindow::startButtonClicked()
     ui->statusLabel->setText(p1->name() + "'s (black) turn");
     ui->blackLabel->setText("Black: 2");
     ui->whiteLabel->setText("White: 2");
-    ui->tabWidget->setCurrentIndex(1);
+    ui->tabWidget->setCurrentIndex( (int)TabIndex::gameTab );
 
     p1->turnStart(f);
 }
@@ -102,6 +156,10 @@ void MainWindow::processTurn(Player *currentPlayer, Position p)
         currentPlayer->turnStart(f);
         return;
     }
+
+    //Sound
+    player->stop();
+    player->play();
 
     //Ui
     Draw(f);

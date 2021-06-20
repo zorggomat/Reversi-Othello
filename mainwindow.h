@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include "QGraphicsPixmapItem"
+#include <QGraphicsPixmapItem>
+#include <QMediaPlayer>
+#include <QBuffer>
 
 #include "player.h"
 #include "match.h"
@@ -25,16 +27,29 @@ public:
     ~MainWindow();
 
 private:
+    enum class TabIndex
+    {
+        menuTab,
+        settingsTab,
+        gameTab
+    };
     void startButtonClicked();
-    void backButtonClicked();
+    void settingsButtonClicked();
+    void settingsTabBackButtonClicked();
+    void gameTabBackButtonClicked();
+    void botTurnSliderMoved(int value);
+    void volumeSliderMoved(int value);
     void Draw(const Match &f);
     Ui::MainWindow *ui;
     GraphicsScene *scene;
+    QMediaPlayer *player;
+    QBuffer *soundBuffer;
     QPixmap fieldPixmap;
     QPixmap whitePixmap;
     QPixmap blackPixmap;
     Player *p1, *p2;
     Match f;
+    int botTurnTime;
 
 public slots:
     void processTurn(Player *currentPlayer, Position p);

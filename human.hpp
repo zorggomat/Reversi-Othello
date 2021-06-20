@@ -12,14 +12,35 @@ class Human : public Player
     CellState color;
     GraphicsScene *scene;
 public:
-    Human(GraphicsScene *s) { scene = s; }
-    void setColor(CellState c) { color = c; }
-    CellState getColor() { return color; }
-    QString name() { return "Human"; }
+    Human(GraphicsScene *s)
+    {
+        scene = s;
+    }
+
+    void setTurnTime(int miliseconds)
+    {
+    }
+
+    void setColor(CellState c)
+    {
+        color = c;
+    }
+
+    CellState getColor()
+    {
+        return color;
+    }
+
+    QString name()
+    {
+        return "Human";
+    }
+
     void turnStart(Match)
     {
         connect(scene, SIGNAL(clicked(Position)), this, SLOT(processClick(Position)));
     }
+
     void processClick(Position p)
     {
         disconnect(scene, SIGNAL(clicked(Position)), this, SLOT(processClick(Position)));
