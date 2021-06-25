@@ -15,7 +15,7 @@ class Match
 public:
     Match();
     Match(const Match& another);
-    inline CellState get(Position p) const;
+    inline CellState get(Position p) const { return field[p.X-1][p.Y-1]; }
     bool makeTurn(Position p, CellState s, bool write = true);
     bool turnsAvailable(CellState type);
     unsigned count(CellState s) const;

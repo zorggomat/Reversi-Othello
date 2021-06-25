@@ -24,10 +24,6 @@ Match::Match(const Match& another)
 {
     field = another.field;
 }
-inline CellState Match::get(Position p) const
-{
-    return field[p.X-1][p.Y-1];
-}
 bool Match::makeTurn(Position p, CellState s, bool write)
 {
     if (!p.correct() || get(p) != empty || s == empty)

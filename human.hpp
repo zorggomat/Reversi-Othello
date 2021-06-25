@@ -19,6 +19,7 @@ public:
 
     void setTurnTime(int miliseconds)
     {
+        Q_UNUSED(miliseconds);
     }
 
     void setColor(CellState c)
