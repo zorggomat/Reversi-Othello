@@ -32,7 +32,7 @@ void SimpleBot::turnStart(Match input)
         {
             Position p(j, i);
             Match n(input);
-            if(n.get(p) == empty && n.makeTurn(p, getColor()))  //Checking all available cells
+            if(n.get(p) == CellState::empty && n.makeTurn(p, getColor()))  //Checking all available cells
             {
                 unsigned profitCount = n.count(getColor());
                 if(profitCount > max) //Selecting cells with best score after turn

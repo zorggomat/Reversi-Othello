@@ -63,7 +63,7 @@ void MainWindow::Draw(const Match &f)
         for(int j = 1; j <= 8; ++j)
         {
             CellState state = f.get(Position(j, i));
-            if (state == empty) continue;
+            if (state == CellState::empty) continue;
             QPixmap &pixmap = (state == white ? whitePixmap : blackPixmap);
             scene->addPixmap(pixmap)->setOffset((j-1)*68+4, (i-1)*68+4);
         }

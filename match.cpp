@@ -14,7 +14,7 @@ inline void Match::set(Position p, CellState newState)
 Match::Match()
 {
     //for_each(field.begin(), field.end(), bind2nd(mem_fun_ref(&array<CellState, 8>::fill), empty) );
-    for(int i = 0; i < 8; ++i) field[i].fill(empty);
+    for(int i = 0; i < 8; ++i) field[i].fill(CellState::empty);
     field[3][3] = white;
     field[4][4] = white;
     field[3][4] = black;
@@ -26,7 +26,7 @@ Match::Match(const Match& another)
 }
 bool Match::makeTurn(Position p, CellState s, bool write)
 {
-    if (!p.correct() || get(p) != empty || s == empty)
+    if (!p.correct() || get(p) != CellState::empty || s == CellState::empty)
         return false;
 
     CellState enemy = ((s == black) ? white : black );
@@ -64,7 +64,7 @@ bool Match::turnsAvailable(CellState type)
 {
     for(char i  = 1; i <= 8; ++i)
         for(int j = 1; j <= 8; ++j)
-            if(get(Position(j, i)) == empty && makeTurn(Position(j, i), type, false))
+            if(get(Position(j, i)) == CellState::empty && makeTurn(Position(j, i), type, false))
                 return true;
     return false;
 }
